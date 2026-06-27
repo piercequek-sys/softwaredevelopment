@@ -71,11 +71,16 @@ function initNav() {
 }
 
 /* ============================================================
-   FORM VALIDATION
+   FORM VALIDATION & SUBMISSION (formsubmit.co — no account needed)
+   First submission triggers a one-time confirmation email to activate.
    ============================================================ */
+const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/f610609363075fbb7468df0eaaefa1b2';
+
 function initForm() {
   const form = document.getElementById('enquiry-form');
+  const submitBtn = document.getElementById('submit-btn');
   const success = document.getElementById('form-success');
+  const errorBanner = document.getElementById('form-error');
   if (!form) return;
 
   function setError(input, msg) {
@@ -106,7 +111,7 @@ function initForm() {
     });
   });
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const fields = [...form.querySelectorAll('[required]')];
     const allValid = fields.every(f => validateField(f));
@@ -114,8 +119,38 @@ function initForm() {
       fields.find(f => f.classList.contains('is-invalid'))?.focus();
       return;
     }
-    form.hidden = true;
-    if (success) success.hidden = false;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    if (errorBanner) errorBanner.hidden = true;
+
+    try {
+      const payload = {
+        name: form.querySelector('#name').value.trim(),
+        email: form.querySelector('#email').value.trim(),
+        phone: form.querySelector('#phone').value.trim(),
+        service: form.querySelector('#service').value,
+        message: form.querySelector('#message').value.trim(),
+      };
+
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const json = await res.json();
+      if (res.ok && json.success === 'true') {
+        form.hidden = true;
+        if (success) success.hidden = false;
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+      if (errorBanner) errorBanner.hidden = false;
+    }
   });
 }
 
@@ -143,6 +178,45 @@ function initReveal() {
 }
 
 /* ============================================================
+   WHATSAPP WIDGET
+   ============================================================ */
+function initWhatsApp() {
+  const widget   = document.getElementById('waWidget');
+  const fab      = document.getElementById('waFab');
+  const popup    = document.getElementById('waPopup');
+  const closeBtn = document.getElementById('waClose');
+  if (!widget || !fab || !popup) return;
+
+  function open() {
+    popup.hidden = false;
+    popup.setAttribute('aria-hidden', 'false');
+    fab.setAttribute('aria-expanded', 'true');
+    widget.classList.add('is-open');
+  }
+
+  function close() {
+    popup.hidden = true;
+    popup.setAttribute('aria-hidden', 'true');
+    fab.setAttribute('aria-expanded', 'false');
+    widget.classList.remove('is-open');
+  }
+
+  fab.addEventListener('click', () => {
+    widget.classList.contains('is-open') ? close() : open();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && widget.classList.contains('is-open')) close();
+  });
+
+  document.addEventListener('click', e => {
+    if (widget.classList.contains('is-open') && !widget.contains(e.target)) close();
+  });
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -150,4 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initForm();
   initReveal();
+  initWhatsApp();
 });

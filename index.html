@@ -89,9 +89,22 @@
   }
   </script>
 
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'none';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com;
+    font-src https://fonts.gstatic.com;
+    img-src 'self' data: https://piercequek-sys.github.io;
+    connect-src https://formsubmit.co;
+    frame-ancestors 'none';
+    form-action https://formsubmit.co;
+    base-uri 'self'
+  " />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" crossorigin="anonymous" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -310,14 +323,21 @@
               <span class="form__error" id="message-error" role="alert" aria-live="polite"></span>
             </div>
 
-            <button class="btn btn--primary btn--full" type="submit">Send Message</button>
+            <!-- Honeypot: hidden from real users; bots that fill it are silently discarded by formsubmit.co -->
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-            <div class="form__success" id="form-success" role="status" aria-live="polite" hidden>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Thanks! We'll be in touch within one business day.
-            </div>
+            <button class="btn btn--primary btn--full" type="submit" id="submit-btn">Send Message</button>
 
           </form>
+
+          <div class="form__success" id="form-success" role="status" aria-live="polite" hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Thanks! We'll be in touch within one business day.
+          </div>
+
+          <div class="form__error-banner" id="form-error" role="alert" aria-live="polite" hidden>
+            Something went wrong. Please try again or email us directly at <a href="mailto:hello@devcraft.io">hello@devcraft.io</a>.
+          </div>
         </div>
 
       </div>
@@ -327,11 +347,82 @@
 
   <!-- ====== FOOTER ====== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <a href="#hero" class="nav__logo">Dev<span>Craft</span></a>
+    <div class="container footer__body">
+
+      <div class="footer__brand">
+        <a href="#hero" class="nav__logo">Dev<span>Craft</span></a>
+        <p class="footer__about">We design and build custom software that helps businesses grow — from MVP to enterprise scale.</p>
+      </div>
+
+      <div class="footer__col">
+        <p class="footer__col-title">Contact</p>
+        <ul class="footer__links" role="list">
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:hello@devcraft.io">hello@devcraft.io</a>
+          </li>
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17z"/></svg>
+            <a href="tel:+6581388041">+65 8138 8041</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <p class="footer__col-title">Connect</p>
+        <ul class="footer__links" role="list">
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            <a href="https://www.linkedin.com/in/piercequek/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="container footer__bottom">
       <p class="footer__copy">&copy; 2026 DevCraft. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ====== WHATSAPP WIDGET ====== -->
+  <div class="wa-widget" id="waWidget">
+
+    <div class="wa-popup" id="waPopup" aria-hidden="true" hidden>
+      <div class="wa-popup__header">
+        <div class="wa-popup__avatar">DC</div>
+        <div class="wa-popup__meta">
+          <span class="wa-popup__name">DevCraft</span>
+          <span class="wa-popup__status">
+            <span class="wa-popup__dot" aria-hidden="true"></span>
+            Typically replies instantly
+          </span>
+        </div>
+        <button class="wa-popup__close" id="waClose" aria-label="Close chat">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="wa-popup__body">
+        <div class="wa-bubble">
+          <p>Hi there 👋 We usually respond in minutes. What can we help you with?</p>
+          <span class="wa-bubble__time">Now</span>
+        </div>
+        <p class="wa-suggestions__label">Quick questions</p>
+        <div class="wa-suggestions">
+          <a class="wa-suggestion" href="https://wa.me/6581388041?text=Hi%2C+I%27d+like+to+discuss+a+custom+software+project." target="_blank" rel="noopener noreferrer">💻 I have a project idea to discuss</a>
+          <a class="wa-suggestion" href="https://wa.me/6581388041?text=Hi%2C+can+I+get+a+free+estimate+for+my+project%3F" target="_blank" rel="noopener noreferrer">📋 Get a free project estimate</a>
+          <a class="wa-suggestion" href="https://wa.me/6581388041?text=Hi%2C+I%27m+interested+in+your+Cloud+%26+DevOps+services." target="_blank" rel="noopener noreferrer">☁️ Cloud &amp; DevOps services</a>
+          <a class="wa-suggestion" href="https://wa.me/6581388041?text=Hi%2C+I+want+to+know+more+about+team+augmentation." target="_blank" rel="noopener noreferrer">👥 Team augmentation</a>
+        </div>
+      </div>
+    </div>
+
+    <button class="wa-fab" id="waFab" aria-label="Chat with us on WhatsApp" aria-expanded="false" aria-controls="waPopup">
+      <svg class="wa-fab__icon wa-fab__icon--wa" viewBox="0 0 32 32" fill="currentColor" width="28" height="28" aria-hidden="true"><path d="M16.004 0C7.164 0 0 7.164 0 16c0 2.824.736 5.474 2.028 7.776L0 32l8.456-2.012A15.932 15.932 0 0016.004 32C24.836 32 32 24.836 32 16S24.836 0 16.004 0zm0 29.332a13.27 13.27 0 01-6.788-1.856l-.488-.288-5.02 1.196 1.22-4.892-.316-.5A13.26 13.26 0 012.668 16c0-7.348 5.984-13.332 13.336-13.332C23.352 2.668 29.332 8.652 29.332 16c0 7.352-5.98 13.332-13.328 13.332zm7.308-9.98c-.4-.2-2.368-1.168-2.732-1.3-.368-.132-.632-.2-.9.2-.264.4-1.032 1.3-1.264 1.564-.232.268-.464.3-.864.1-.4-.2-1.688-.624-3.216-1.984-1.188-1.06-1.988-2.368-2.22-2.768-.232-.4-.024-.616.176-.816.18-.18.4-.468.6-.7.2-.232.264-.4.396-.664.132-.264.064-.5-.036-.7-.1-.2-.9-2.168-1.232-2.968-.328-.784-.66-.676-.9-.688-.232-.012-.5-.016-.764-.016-.264 0-.7.1-1.064.5-.368.4-1.4 1.368-1.4 3.332s1.432 3.864 1.632 4.132c.2.264 2.82 4.308 6.832 6.04.956.412 1.7.66 2.28.844.96.304 1.832.26 2.52.158.768-.116 2.368-.968 2.7-1.904.336-.936.336-1.736.236-1.904-.096-.168-.36-.268-.76-.468z"/></svg>
+      <svg class="wa-fab__icon wa-fab__icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="22" height="22" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span class="wa-fab__badge" aria-hidden="true">1</span>
+    </button>
+
+  </div>
 
   <script src="script.js" defer></script>
 </body>
