@@ -28,13 +28,17 @@ Pure HTML, CSS, and JavaScript — no frameworks or build tools.
 ```
 ├── index.html          # Single-page layout: Nav, Hero, Services, Testimonials, Contact, Footer
 ├── styles.css          # All styles — CSS custom properties, mobile-first, BEM naming
-├── script.js           # Build ticker animation, form validation, WhatsApp widget, nav, scroll reveal
+├── script.js           # Build ticker, form validation + voice notification, WhatsApp widget, nav, scroll reveal
 ├── favicon.svg         # SVG favicon
 ├── robots.txt          # Search crawler rules
 ├── sitemap.xml         # XML sitemap for SEO
 ├── screenshot.png      # Full-page site screenshot
-└── .claude/skills/
-    └── frontend-design.md  # Project-specific design skill (DevCraft edition)
+├── .claude/
+│   ├── hooks/
+│   │   └── validate-form-fields.sh  # PreToolUse hook — guards form field validation in edits
+│   ├── settings.json                # Registers hooks with Claude Code
+│   └── skills/
+│       └── frontend-design.md       # Project-specific design skill (DevCraft edition)
 ```
 
 ## Running Locally
