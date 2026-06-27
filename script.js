@@ -143,6 +143,12 @@ function initForm() {
       if (res.ok && json.success === 'true') {
         form.hidden = true;
         if (success) success.hidden = false;
+        if ('speechSynthesis' in window) {
+          const msg = new SpeechSynthesisUtterance('Thanks! We will be in touch within one business day.');
+          msg.lang = 'en-US';
+          msg.rate = 0.95;
+          speechSynthesis.speak(msg);
+        }
       } else {
         throw new Error('Submission failed');
       }
