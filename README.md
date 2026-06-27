@@ -28,7 +28,7 @@ Pure HTML, CSS, and JavaScript — no frameworks or build tools.
 ```
 ├── index.html          # Single-page layout: Nav, Hero, Services, Testimonials, Contact, Footer
 ├── styles.css          # All styles — CSS custom properties, mobile-first, BEM naming
-├── script.js           # Build ticker animation, form validation, nav, scroll reveal
+├── script.js           # Build ticker animation, form validation, WhatsApp widget, nav, scroll reveal
 ├── favicon.svg         # SVG favicon
 ├── robots.txt          # Search crawler rules
 ├── sitemap.xml         # XML sitemap for SEO
