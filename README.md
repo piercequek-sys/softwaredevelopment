@@ -6,6 +6,10 @@ A static marketing landing page for **DevCraft** — a software development agen
 
 [https://piercequek-sys.github.io/softwaredevelopment/](https://piercequek-sys.github.io/softwaredevelopment/)
 
+## Screenshot
+
+![DevCraft landing page](screenshot.png)
+
 ## Tech Stack
 
 Pure HTML, CSS, and JavaScript — no frameworks or build tools.
